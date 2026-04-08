@@ -3454,5 +3454,25 @@ static inline int seal_check_write(int seals, struct vm_area_struct *vma)
 	return 0;
 }
 
+struct seq_file;
+void seq_printf(struct seq_file *m, const char *f, ...);
+
+static inline void show_val_meminfo(struct seq_file *m,
+				    const char *str, long size)
+{
+	char name[17];
+	int len = strlen(str);
+
+	if (len <= 15) {
+		sprintf(name, "%s:", str);
+	} else {
+		strncpy(name, str, 15);
+		name[15] = ':';
+		name[16] = '\0';
+	}
+
+	seq_printf(m, "%-16s%8ld kB\n", name, size);
+}
+
 #endif /* __KERNEL__ */
 #endif /* _LINUX_MM_H */
